@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Секс-калькулятор: Продолжительность акта | Медицинско-развлекательный проект</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #eef4ff;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(22, 34, 48, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #ffc8a2, #ff9f6e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.75;
+            margin-bottom: 1.8rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 0.6rem;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            background: #2d3e4e;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn.active {
+            background: #ff8c42;
+            color: #1e2a32;
+            box-shadow: 0 0 12px rgba(255,140,66,0.5);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #cddce9;
+        }
+
+        .input-group input, .input-group select {
+            background: #0f1a1f;
+            border: 1px solid #3e5a6b;
+            padding: 10px 12px;
+            border-radius: 28px;
+            color: white;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #ff9f6e;
+            box-shadow: 0 0 5px #ff9f6e;
+        }
+
+        .result-area {
+            background: #071016b3;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid #ffb34740;
+        }
+
+        .duration {
+            font-size: 3.2rem;
+            font-weight: 800;
+            font-family: monospace;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffe6b3, #ffb86b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .duration-unit {
+            font-size: 1.2rem;
+            color: #ffcf9a;
+        }
+
+        .note {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .extra-stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            font-size: 0.75rem;
+        }
+
+        button.calc {
+            background: #ff8c42;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 60px;
+            color: #1e2f3c;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 6px 0 #a3470e;
+        }
+
+        button.calc:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #a3470e;
+        }
+
+        hr {
+            border-color: #3a576b;
+            margin: 20px 0;
+        }
+
+        .funfact {
+            font-size: 0.8rem;
+            text-align: center;
+            background: #1c2e3a;
+            padding: 8px;
+            border-radius: 60px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            .duration {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⏱️ Sex-Duration Calculator ⏱️</h1>
+    <div class="sub">Медицинско-развлекательный инструмент | Только для мужчин</div>
+
+    <div class="mode-selector">
+        <button data-mode="6" class="mode-btn">🔰 Базовый (6 факт.)</button>
+        <button data-mode="8" class="mode-btn active">⚙️ Средний (8 факт.)</button>
+        <button data-mode="10" class="mode-btn">🚀 Продвинутый (10+ факт.)</button>
+    </div>
+
+    <div class="form-grid" id="inputsContainer">
+        <!-- динамические поля будут загружены через js, но для SEO и скорости создадим структуру, потом перезаполним -->
+    </div>
+
+    <button class="calc" id="calculateBtn">✨ РАССЧИТАТЬ ПРОДОЛЖИТЕЛЬНОСТЬ ✨</button>
+
+    <div class="result-area">
+        <div>📊 ПРОГНОЗ ДЛИТЕЛЬНОСТИ ПОЛОВОГО АКТА:</div>
+        <div class="duration" id="durationResult">--:--</div>
+        <div class="extra-stats" id="extraStats">
+            <span>🔥 Базовая выносливость: —</span>
+            <span>🌀 Мод. фактор: —</span>
+        </div>
+        <div class="note" id="dynamicNote">
+            * Результат основан на запатентованной формуле, носит развлекательный характер.
+        </div>
+    </div>
+
+    <div class="funfact" id="funFactArea">
+        💡 Самая долгая мастурбация в мире (зафиксированная) — 8+ часов? Твой результат сравним!
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. Определяем все возможные параметры (универсальные)
+    //    Для простоты: все поля всегда отображаются, но в зависимости от уровня
+    //    какие-то становятся disabled (игнорируются) или скрываются (лучше скрыть)
+    //    Для чистоты: при смене режима показываем только нужные поля и пересчитываем.
+    // --------------------------------------------------------------
+    
+    // метаданные о полях: имя, метка, тип, min, max, значение по умолчанию, шаг, всегда ли доступно
+    const allFields = [
+        { id: "age", label: "📅 Возраст (лет)", type: "range", min: 16, max: 70, def: 32, step: 1, suffix: " лет", always: true },
+        { id: "height", label: "📏 Рост (см)", type: "number", min: 140, max: 220, def: 175, step: 1, suffix: " см", always: true },
+        { id: "weight", label: "⚖️ Вес (кг)", type: "number", min: 45, max: 160, def: 78, step: 1, suffix: " кг", always: true },
+        { id: "physique", label: "💪 Телосложение", type: "select", options: ["Эктоморф (худощавый)", "Мезоморф (атлетичный)", "Эндоморф (плотный)"], def: "Мезоморф (атлетичный)", always: true },
+        { id: "penis_len", label: "📏 Длина члена (см)", type: "number", min: 7, max: 24, def: 13.5, step: 0.5, suffix: " см", always: true },
+        { id: "penis_girth", label: "📐 Обхват члена (см)", type: "number", min: 8, max: 18, def: 11.5, step: 0.5, suffix: " см", always: true },
+        { id: "intensity", label: "⚡ Интенсивность (темп)", type: "select", options: ["Медленный (расслабленный)", "Средний (классический)", "Быстрый (энергичный)", "Экстремальный (спринт)"], def: "Средний (классический)", always: true },
+        // доп. поля для продвинутого / среднего режима (8 или 10)
+        { id: "libido_boost", label: "🍃 Либидо-фактор", type: "select", options: ["Пониженное", "Нормальное", "Повышенное", "Гиперсексуальность"], def: "Нормальное", always: false, minLevel: 8 },
+        { id: "sleep_quality", label: "😴 Качество сна (1-10)", type: "range", min: 1, max: 10, def: 7, step: 1, suffix: " баллов", always: false, minLevel: 8 },
+        { id: "stress", label: "🧠 Уровень стресса (1-10)", type: "range", min: 1, max: 10, def: 4, step: 1, suffix: " (1 низкий - 10 высокий)", always: false, minLevel: 8 },
+        { id: "fitness", label: "🏋️ Физ. подготовка", type: "select", options: ["Низкая", "Средняя", "Высокая", "Элитная"], def: "Средняя", always: false, minLevel: 10 }
+    ];
+
+    let currentMode = 8;   // 6,8,10
+    let dynamicFormElements = new Map(); // хранит DOM элементы
+
+    const container = document.getElementById("inputsContainer");
+    const durationSpan = document.getElementById("durationResult");
+    const extraStatsSpan = document.getElementById("extraStats");
+    const funFactSpan = document.getElementById("funFactArea");
+
+    // глобальная функция рендера формы согласно currentMode
+    function renderForm() {
+        container.innerHTML = "";
+        dynamicFormElements.clear();
+        // фильтруем поля: always true или minLevel <= currentMode
+        const visibleFields = allFields.filter(f => f.always === true || (f.minLevel && f.minLevel <= currentMode));
+        
+        for (let field of visibleFields) {
+            const div = document.createElement("div");
+            div.className = "input-group";
+            const label = document.createElement("label");
+            label.innerText = field.label;
+            
+            let input;
+            if (field.type === "select") {
+                input = document.createElement("select");
+                field.options.forEach(opt => {
+                    const option = document.createElement("option");
+                    option.value = opt;
+                    option.innerText = opt;
+                    if (opt === field.def) option.selected = true;
+                    input.appendChild(option);
+                });
+            } else if (field.type === "range") {
+                input = document.createElement("input");
+                input.type = "range";
+                input.min = field.min;
+                input.max = field.max;
+                input.step = field.step || 1;
+                input.value = field.def;
+                const spanVal = document.createElement("span");
+                spanVal.style.fontSize = "0.75rem";
+                spanVal.style.marginLeft = "8px";
+                spanVal.id = `${field.id}_val`;
+                input.addEventListener("input", (e) => {
+                    const sv = document.getElementById(`${field.id}_val`);
+                    if (sv) sv.innerText = e.target.value + (field.suffix || "");
+                });
+                label.appendChild(spanVal);
+                setTimeout(() => {
+                    const sv = document.getElementById(`${field.id}_val`);
+                    if (sv) sv.innerText = input.value + (field.suffix || "");
+                }, 10);
+                div.appendChild(label);
+                div.appendChild(input);
+                const auxSpan = document.createElement("span");
+                auxSpan.id = `${field.id}_val`;
+                auxSpan.style.fontSize = "0.7rem";
+                auxSpan.innerText = input.value + (field.suffix || "");
+                div.appendChild(auxSpan);
+                dynamicFormElements.set(field.id, input);
+                container.appendChild(div);
+                continue;
+            } else { // number
+                input = document.createElement("input");
+                input.type = "number";
+                input.step = field.step || 1;
+                input.min = field.min;
+                input.max = field.max;
+                input.value = field.def;
+            }
+            
+            if (field.type !== "range") {
+                div.appendChild(label);
+                div.appendChild(input);
+            } else {
+                // уже обработали выше
+            }
+            if (field.type !== "range") {
+                dynamicFormElements.set(field.id, input);
+                container.appendChild(div);
+            }
+        }
+        // добавим подсказку о количестве факторов
+        const hint = document.createElement("div");
+        hint.style.fontSize = "0.7rem";
+        hint.style.textAlign = "right";
+        hint.style.marginTop = "8px";
+        hint.style.opacity = "0.7";
+        hint.innerText = `✅ Активно факторов: ${visibleFields.length} (режим ${currentMode})`;
+        container.appendChild(hint);
+    }
+
+    // -------- ЮВЕЛИРНАЯ СЛОЖНАЯ ФОРМУЛА ----------
+    // Возвращает время в СЕКУНДАХ (диапазон от 180 сек = 3 мин до 28800 сек = 8 часов)
+    function computeDurationSeconds(params) {
+        // 1) Базовая константа ~ 15 минут (900 сек) - мужчина средний 30 лет, рост 175, вес 75, член 13см, обхват 11, интенсивность средняя, телосложение мезоморф
+        let base = 900; 
+        
+        // ВОЗРАСТ: пик выносливости 22-35 лет, спад после 45 (уменьшает)
+        let age = params.age;
+        let ageFactor = 1.0;
+        if (age < 22) ageFactor = 0.85 + (age-16)*0.025; // от 0.85 до 1.0 к 22
+        else if (age <= 35) ageFactor = 1.0 + (35-age)*0.003; // максимум 1.04
+        else ageFactor = 1.0 - Math.min(0.5, (age-35)*0.012); // к 70 лет 0.58
+        ageFactor = Math.min(1.2, Math.max(0.6, ageFactor));
+        
+        // РОСТ и ВЕС: ИМТ и корректировка (выносливость оптимальна ИМТ 22-25)
+        let heightM = params.height / 100;
+        let bmi = params.weight / (heightM * heightM);
+        let bmiFactor = 1.0;
+        if (bmi < 18.5) bmiFactor = 0.85;
+        else if (bmi < 22) bmiFactor = 0.95;
+        else if (bmi <= 27) bmiFactor = 1.0;
+        else if (bmi <= 32) bmiFactor = 0.92;
+        else bmiFactor = 0.78;
+        
+        // Телосложение: эктоморф меньше выносливость (быстрее утомление?), мезоморф +, эндоморф среднее
+        let physiqueMap = {"Эктоморф (худощавый)": 0.88, "Мезоморф (атлетичный)": 1.08, "Эндоморф (плотный)": 0.96};
+        let physiqueFactor = physiqueMap[params.physique] || 1.0;
+        
+        // Длина члена и обхват (психосоматический + физиологический эффект: больший объем может требовать больше выносливости? но и доставлять удовольствие = увеличение длительности)
+        // Формула: (длина-12)*0.03 + (обхват-11)*0.04, но кап
+        let lenFactor = 1 + (params.penis_len - 12.5) * 0.022;
+        let girthFactor = 1 + (params.penis_girth - 11.5) * 0.018;
+        let sizeFactor = Math.min(1.25, Math.max(0.85, lenFactor * girthFactor));
+        
+        // Интенсивность: медленный -> длиннее акт, быстрый -> короче (спринт резко уменьшает)
+        let intensityMap = {
+            "Медленный (расслабленный)": 1.65,
+            "Средний (классический)": 1.0,
+            "Быстрый (энергичный)": 0.72,
+            "Экстремальный (спринт)": 0.45
+        };
+        let intensityFactor = intensityMap[params.intensity] || 1.0;
+        
+        // Далее идут необязательные коэфы (режим 8+)
+        let libidoFactor = 1.0;
+        if (params.libido_boost !== undefined) {
+            let libMap = {"Пониженное": 0.75, "Нормальное": 1.0, "Повышенное": 1.18, "Гиперсексуальность": 1.42};
+            libidoFactor = libMap[params.libido_boost] || 1.0;
+        }
+        
+        let sleepFactor = 1.0;
+        if (params.sleep_quality !== undefined) {
+            let sleepScore = params.sleep_quality;
+            sleepFactor = 0.7 + (sleepScore / 10) * 0.6;   // от 0.76 при 1 до 1.3 при 10
+            sleepFactor = Math.min(1.35, Math.max(0.75, sleepFactor));
+        }
+        
+        let stressFactor = 1.0;
+        if (params.stress !== undefined) {
+            let stressLvl = params.stress;
+            stressFactor = 1.35 - (stressLvl / 10) * 0.7; // стресс 1 -> 1.28, стресс 10 -> 0.65
+            stressFactor = Math.min(1.3, Math.max(0.55, stressFactor));
+        }
+        
+        let fitnessFactor = 1.0;
+        if (params.fitness !== undefined) {
+            let fitMap = {"Низкая": 0.78, "Средняя": 1.0, "Высокая": 1.22, "Элитная": 1.45};
+            fitnessFactor = fitMap[params.fitness] || 1.0;
+        }
+        
+        // ИТОГОВЫЙ множитель:
+        let totalFactor = ageFactor * bmiFactor * physiqueFactor * sizeFactor * intensityFactor * libidoFactor * sleepFactor * stressFactor * fitnessFactor;
+        
+        // время в секундах
+        let durationSec = base * totalFactor;
+        
+        // Добавим нелинейную коррекцию (скобки, деление, экспоненциальная мягкая граница)
+        // Чтобы диапазон гарантированно 180..28800, применяем сигмоидную растяжку через clamp + доп. логику
+        // но сначала учтём, что если результат слишком мал - поднимем, велик - ограничим.
+        // сделаем мягкий лимит: durationSec = 180 + (durationSec - 180) * (1/(1+exp(-(durationSec-900)/2000))) - это сложно, но для чистоты:
+        let raw = durationSec;
+        // Добавим небольшую стохастику для развлекательности +-5% (детерминированное по сумме показателей)
+        let pseudoRand = ( (params.age * 7 + params.height * 3 + params.weight * 2) % 97 ) / 97.0; // 0..1
+        let varFactor = 0.92 + pseudoRand * 0.16; // 0.92 - 1.08
+        raw = raw * varFactor;
+        
+        // Окончательное ограничение от 180 до 28800 секунд
+        let finalSec = Math.min(28800, Math.max(180, Math.round(raw)));
+        return finalSec;
+    }
+    
+    // получить значения из формы в зависимости от текущих полей
+    function gatherParams() {
+        let params = {};
+        for (let [id, el] of dynamicFormElements.entries()) {
+            let fieldDef = allFields.find(f => f.id === id);
+            if (!fieldDef) continue;
+            if (fieldDef.type === "select") {
+                params[id] = el.value;
+            } else if (fieldDef.type === "range") {
+                params[id] = parseFloat(el.value);
+            } else {
+                // number
+                let val = parseFloat(el.value);
+                if (isNaN(val)) val = fieldDef.def;
+                params[id] = val;
+            }
+        }
+        // подстраховка: если вдруг нет некоторых always - добавим дефолты
+        if (!params.age) params.age = 32;
+        if (!params.height) params.height = 175;
+        if (!params.weight) params.weight = 78;
+        if (!params.physique) params.physique = "Мезоморф (атлетичный)";
+        if (!params.penis_len) params.penis_len = 13.5;
+        if (!params.penis_girth) params.penis_girth = 11.5;
+        if (!params.intensity) params.intensity = "Средний (классический)";
+        // для продвинутых параметров если поле отсутствует (отключено режимом) задаём нейтральные значения
+        if (!params.libido_boost) params.libido_boost = "Нормальное";
+        if (!params.sleep_quality) params.sleep_quality = 7;
+        if (!params.stress) params.stress = 4;
+        if (!params.fitness) params.fitness = "Средняя";
+        return params;
+    }
+    
+    function formatDuration(seconds) {
+        if (seconds >= 3600) {
+            let hours = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds % 3600) / 60);
+            return `${hours} ч ${mins} мин`;
+        } else if (seconds >= 60) {
+            let mins = Math.floor(seconds / 60);
+            let secs = seconds % 60;
+            return `${mins} мин ${secs} сек`;
+        } else {
+            return `${seconds} сек`;
+        }
+    }
+    
+    function updateFunFact(seconds, mode) {
+        let facts = [
+            "💡 Мастурбационный рекорд (неофициально) — до 10 часов! Но акт короче.",
+            "⚡ Исследования: с возрастом продолжительность может расти до 50 лет.",
+            "🧘‍♂️ Контроль дыхания способен увеличить акт на 30-40%.",
+            "🍆 Продвинутый режим учитывает даже качество сна!",
+            "🏆 Твой результат ± 15% из-за психологического настроя."
+        ];
+        let rand = (seconds % facts.length);
+        funFactSpan.innerHTML = `✨ ${facts[rand]} ✨ | Текущий режим: ${mode} факторов`;
+        if (seconds >= 10800) funFactSpan.innerHTML = "🔥 МАРАФОНЕЦ! 3+ часа — ты в 0.1% элиты. 🔥";
+        else if (seconds <= 300) funFactSpan.innerHTML = "💨 Быстрый старт? Попробуй снизить темп или уровень стресса!";
+    }
+    
+    function calculateAndDisplay() {
+        const params = gatherParams();
+        let durationSec = computeDurationSeconds(params);
+        let durStr = formatDuration(durationSec);
+        durationSpan.innerText = durStr;
+        
+        // дополнительные статы
+        let minutesTotal = durationSec / 60;
+        let intensityName = params.intensity;
+        let extraHtml = `<span>⏱️ ${minutesTotal.toFixed(1)} минут</span>
+                         <span>🧬 Интенсив: ${intensityName.substring(0,12)}</span>`;
+        if (currentMode >= 8) {
+            extraHtml += `<span>💤 Сон/стресс: ${params.sleep_quality || '?'}/${params.stress || '?'}</span>`;
+        }
+        if (currentMode >= 10) {
+            extraHtml += `<span>🏋️ Фитнес: ${params.fitness || 'средний'}</span>`;
+        }
+        extraStatsSpan.innerHTML = extraHtml;
+        updateFunFact(durationSec, currentMode);
+    }
+    
+    // смена режима
+    function setMode(mode) {
+        currentMode = mode;
+        renderForm();
+        // перепривязываем события на калькулятор
+        const calcBtn = document.getElementById("calculateBtn");
+        if (calcBtn) {
+            // удалим старый обработчик чтобы не дублировать
+            const newBtn = calcBtn.cloneNode(true);
+            calcBtn.parentNode.replaceChild(newBtn, calcBtn);
+            newBtn.addEventListener("click", calculateAndDisplay);
+        } else {
+            document.getElementById("calculateBtn")?.addEventListener("click", calculateAndDisplay);
+        }
+        calculateAndDisplay(); // авто пересчет
+    }
+    
+    // инициализация
+    function init() {
+        renderForm();
+        const btns = document.querySelectorAll(".mode-btn");
+        btns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                btns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                let modeVal = parseInt(btn.getAttribute("data-mode"), 10);
+                setMode(modeVal);
+            });
+        });
+        const calcBtn = document.getElementById("calculateBtn");
+        calcBtn.addEventListener("click", calculateAndDisplay);
+        calculateAndDisplay();
+    }
+    
+    init();
+</script>
+</body>
+</html>
